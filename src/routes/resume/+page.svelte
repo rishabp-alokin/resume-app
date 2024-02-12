@@ -1,0 +1,37 @@
+<script>
+	import { AppBar, getModalStore } from '@skeletonlabs/skeleton';
+
+	export let data;
+	console.log(data.resumes, '......');
+
+	const modalStore = getModalStore();
+
+	function openModal() {
+		modalStore.trigger({
+			type: 'component',
+			component: 'ResumeFormModal',
+			backdropClasses: '!p-0'
+		});
+	}
+</script>
+
+<div>
+	<AppBar gridColumns="grid-cols-2" slotDefault="place-self-left" slotTrail="place-content-end">
+		Resumes
+		<svelte:fragment slot="trail">
+			<button type="button" class="btn-icon btn-lg variant-filled" on:click={() => openModal()}>
+				<img
+					width="64"
+					height="64"
+					src="https://img.icons8.com/pastel-glyph/64/plus--v1.png"
+					alt="plus--v1"
+				/>
+			</button>
+		</svelte:fragment>
+	</AppBar>
+	<div>
+		{#each data.resumes as resume}
+			<span>{resume.name}</span>
+		{/each}
+	</div>
+</div>

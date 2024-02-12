@@ -1,0 +1,12 @@
+{
+	"/": [],
+	"/api/resume": [
+		"src/routes/api/resume/+server.js"
+	],
+	"/api/resume/[resume_id]": [
+		"src/routes/api/resume/[resume_id]/+server.js"
+	],
+	"/resume": [
+		"src/routes/resume/+page.js"
+	]
+}
