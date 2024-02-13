@@ -1,10 +1,5 @@
 <script lang="js">
-	$: languages = [
-		{
-			language: '',
-			proficiency: ''
-		}
-	];
+	export let languages = [];
 	let defaultLanguage = {
 		language: '',
 		proficiency: ''

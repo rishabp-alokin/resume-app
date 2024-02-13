@@ -1,12 +1,5 @@
 <script lang="js">
-	$: educations = [
-		{
-			course: '',
-			institution: '',
-			marks: '',
-			passout_year: ''
-		}
-	];
+	export let educations = [];
 	let defaultEducation = {
 		course: '',
 		institution: '',

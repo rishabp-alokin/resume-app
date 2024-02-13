@@ -1,5 +1,6 @@
 <script>
 	import { AppBar, getModalStore } from '@skeletonlabs/skeleton';
+	import ResumeCard from '$lib/components/ResumeFormModal/ResumeCard.svelte';
 
 	export let data;
 	console.log(data.resumes, '......');
@@ -29,9 +30,9 @@
 			</button>
 		</svelte:fragment>
 	</AppBar>
-	<div>
+	<div class="grid gap-4 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 p-4">
 		{#each data.resumes as resume}
-			<span>{resume.name}</span>
+			<ResumeCard cardDeatils={resume}/>
 		{/each}
 	</div>
 </div>

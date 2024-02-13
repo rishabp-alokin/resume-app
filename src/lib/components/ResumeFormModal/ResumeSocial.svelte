@@ -1,5 +1,5 @@
 <script lang="js">
-	$: socials = [
+	export let socials = [
 		{
 			platform: '',
 			url: ''

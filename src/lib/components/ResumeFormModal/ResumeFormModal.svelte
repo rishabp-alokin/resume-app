@@ -11,11 +11,61 @@
 	import ResumeLanguages from './ResumeLanguages.svelte';
 	const cBase =
 		'bg-surface-100-800-token w-screen h-screen p-4 flex flex-col justify-center items-center relative';
-	$: skills = [];
 
 	function closeModal() {
 		modalStore.close();
 	}
+
+	$: data = {
+		name: '',
+		designation: '',
+		email: '',
+		phone: '',
+		summary: '',
+		address: {
+			address: '',
+			city: '',
+			state: '',
+			country: '',
+			pin_code: ''
+		},
+		social_media: [
+			{
+				platform: '',
+				url: ''
+			}
+		],
+		eduaction: [
+			{
+				course: '',
+				institution: '',
+				marks: '',
+				passout_year: ''
+			}
+		],
+		projects: [],
+		work_experience: [
+			{
+				course: '',
+				institution: '',
+				marks: '',
+				passout_year: ''
+			}
+		],
+		certifications: [
+			{
+				certification_name: '',
+				certification_url: ''
+			}
+		],
+		skills: [],
+		languages: [
+			{
+				language: '',
+				proficiency: ''
+			}
+		]
+	};
 </script>
 
 <div class={cBase}>
@@ -62,46 +112,53 @@
 			<div class="grid grid-cols-2 gap-4">
 				<label class="label">
 					<span>Name</span>
-					<input class="input" type="text" placeholder="Name" />
+					<input class="input" type="text" placeholder="Name" value={data.name} />
 				</label>
 				<label class="label">
 					<span>Designation</span>
-					<input class="input" type="text" placeholder="Designation" />
+					<input class="input" type="text" placeholder="Designation" value={data.designation} />
 				</label>
 				<label class="label">
 					<span>Email</span>
-					<input class="input" type="email" placeholder="Email" />
+					<input class="input" type="email" placeholder="Email" value={data.email} />
 				</label>
 				<label class="label">
 					<span>Phone</span>
-					<input class="input" type="number" placeholder="Phone" />
+					<input class="input" type="number" placeholder="Phone" value={data.email} />
 				</label>
 			</div>
 			<label class="label">
 				<span>Summary</span>
-				<textarea name="summary" id="summary" rows="4" class="textarea" placeholder="Summary" />
+				<textarea
+					name="summary"
+					id="summary"
+					rows="4"
+					class="textarea"
+					placeholder="Summary"
+					value={data.summary}
+				/>
 			</label>
 		</Step>
 		<Step>
 			<svelte:fragment slot="header">Address & Socials</svelte:fragment>
-			<ResumeAddressSocials />
+			<ResumeAddressSocials address={data.address} social_media={data.social_media} />
 		</Step>
 		<Step>
 			<svelte:fragment slot="header">Education & Projects</svelte:fragment>
-			<ResumeEducation />
-			<ResumeProjects />
+			<ResumeEducation educations={data.eduaction} />
+			<ResumeProjects projects={data.projects} />
 		</Step>
 		<Step>
 			<svelte:fragment slot="header">Work Experiences & Certificates</svelte:fragment>
-			<ResumeWorkExperienece />
-			<ResumeCertifications />
+			<ResumeWorkExperienece experiences={data.work_experience} />
+			<ResumeCertifications certificates={data.certifications} />
 		</Step>
 		<Step>
 			<svelte:fragment slot="header">Skills & Lauguages</svelte:fragment>
 			<hr class="!border-dashed pb-2" />
 			<span>Skills</span>
-			<InputChip bind:value={skills} name="Skills" placeholder="Enter Skills Here" max="7" />
-			<ResumeLanguages />
+			<InputChip bind:value={data.skills} name="Skills" placeholder="Enter Skills Here" max="7" />
+			<ResumeLanguages languages={data.languages} />
 		</Step>
 	</Stepper>
 </div>

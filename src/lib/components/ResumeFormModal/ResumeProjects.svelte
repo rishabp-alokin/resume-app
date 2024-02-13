@@ -1,5 +1,5 @@
 <script lang="js">
-	$: projects = [];
+	export let projects = [];
 	let defaultProject = {
 		title: '',
 		description: ''

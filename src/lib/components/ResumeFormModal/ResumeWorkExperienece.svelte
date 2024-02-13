@@ -1,12 +1,5 @@
 <script lang="js">
-	$: experiences = [
-		{
-			course: '',
-			institution: '',
-			marks: '',
-			passout_year: ''
-		}
-	];
+	export let experiences = [];
 	let defaultExperience = {
 		course: '',
 		institution: '',

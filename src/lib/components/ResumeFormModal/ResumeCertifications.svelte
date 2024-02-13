@@ -1,10 +1,5 @@
 <script lang="js">
-	$: certificates = [
-		{
-			certification_name: '',
-			certification_url: ''
-		}
-	];
+	export let certificates = [];
 	let defaultCertificate = {
 		certification_name: '',
 		certification_url: ''
