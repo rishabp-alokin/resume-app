@@ -1,7 +1,5 @@
 import * as edgedb from 'edgedb';
 import e from '../../dbschema/edgeql-js';
-import { filter } from '@skeletonlabs/skeleton';
-import { basic_details, social_media } from '../../dbschema/edgeql-js/modules/default';
 
 const client = edgedb.createClient();
 
@@ -32,11 +30,58 @@ export async function createResume(data) {
 					state: e.cast(e.str, item.address.state),
 					postal_code: e.cast(e.str, item.address.postal_code)
 				}),
+				skills: e.insert(e.skills, {
+					skills: e.cast(e.json, item.skills.skills)
+				}),
 				social_media: e.assert_distinct(
 					e.for(e.json_array_unpack(item.social_media), (sm) => {
 						return e.insert(e.social_media, {
 							platform: sm.platform ? e.cast(e.str, sm.platform) : null,
 							url: sm.url ? e.cast(e.str, sm.url) : null
+						});
+					})
+				),
+				education: e.assert_distinct(
+					e.for(e.json_array_unpack(item.education), (edu) => {
+						return e.insert(e.education, {
+							institution: e.cast(e.str, edu.institution),
+							course: e.cast(e.str, edu.course),
+							passout_year: e.cast(e.int16, edu.passout_year),
+							marks: e.cast(e.int32, edu.marks)
+						});
+					})
+				),
+				work_experience: e.assert_distinct(
+					e.for(e.json_array_unpack(item.work_experience), (we) => {
+						return e.insert(e.work_experience, {
+							company: e.cast(e.str, we.company),
+							designation: e.cast(e.str, we.designation),
+							joining_date: e.cast(e.datetime, we.joining_date),
+							worked_till: e.cast(e.datetime, we.worked_till)
+						});
+					})
+				),
+				projects: e.assert_distinct(
+					e.for(e.json_array_unpack(item.projects), (proj) => {
+						return e.insert(e.projects, {
+							title: e.cast(e.str, proj.title),
+							description: e.cast(e.str, proj.description)
+						});
+					})
+				),
+				certifications: e.assert_distinct(
+					e.for(e.json_array_unpack(item.certifications), (cert) => {
+						return e.insert(e.certifications, {
+							certification_name: e.cast(e.str, cert.certification_name),
+							certification_url: e.cast(e.str, cert.certification_url)
+						});
+					})
+				),
+				languages: e.assert_distinct(
+					e.for(e.json_array_unpack(item.languages), (lang) => {
+						return e.insert(e.languages, {
+							language: e.cast(e.str, lang.language),
+							proficiency: e.cast(e.str, lang.proficiency)
 						});
 					})
 				)
@@ -89,16 +134,6 @@ export async function getResumeDetails(resumeId = '') {
 export async function updateResume(resumeId = '', data) {
 	console.log(data, resumeId, '.................');
 	if (resumeId) {
-		const allSocialMedia = await e
-			.select(e.basic_details, () => ({
-				id: true,
-				social_media: () => ({
-					...e.social_media['*']
-				}),
-				filter_single: { id: resumeId }
-			}))
-			.run(client) ?? [];
-
 		const query = e.update(e.basic_details, () => ({
 			filter_single: { id: resumeId },
 			set: {
@@ -118,10 +153,15 @@ export async function updateResume(resumeId = '', data) {
 						postal_code: data.address.postal_code
 					}
 				})),
+				skills: e.update(e.skills, () => ({
+					filter_single: { id: data.skills.id },
+					set: {
+						skills: data.skills.skills
+					}
+				})),
 				social_media: e.assert_distinct(
 					e.set(
-						...data.social_media.map((sm, index) => {
-
+						...data.social_media.map((sm) => {
 							if (sm.id)
 								return e.update(e.social_media, () => ({
 									filter_single: { id: sm.id },
@@ -133,85 +173,126 @@ export async function updateResume(resumeId = '', data) {
 							else
 								return e.insert(e.social_media, {
 									platform: sm.platform,
-									url: sm.url,
-									basic_details: e.basic_details
+									url: sm.url
+								});
+						})
+					)
+				),
+				education: e.assert_distinct(
+					e.set(
+						...data.education.map((edu) => {
+							if (edu.id)
+								return e.update(e.education, () => ({
+									filter_single: { id: edu.id },
+									set: {
+										institution: edu.institution,
+										course: edu.course,
+										passout_year: edu.passout_year,
+										marks: edu.marks
+									}
+								}));
+							else
+								return e.insert(e.education, {
+									institution: edu.institution,
+									course: edu.course,
+									passout_year: edu.passout_year,
+									marks: edu.marks
+								});
+						})
+					)
+				),
+				work_experience: e.assert_distinct(
+					e.set(
+						...data.work_experience.map((we) => {
+							if (we.id)
+								return e.update(e.work_experience, () => ({
+									filter_single: { id: we.id },
+									set: {
+										company: we.company,
+										designation: we.designation,
+										joining_date: we.joining_date,
+										worked_till: we.worked_till
+									}
+								}));
+							else
+								return e.insert(e.work_experience, {
+									company: we.company,
+									designation: we.designation,
+									joining_date: we.joining_date,
+									worked_till: we.worked_till
+								});
+						})
+					)
+				),
+				projects: e.assert_distinct(
+					e.set(
+						...data.projects.map((proj) => {
+							if (proj.id)
+								return e.update(e.projects, () => ({
+									filter_single: { id: proj.id },
+									set: {
+										title: proj.title,
+										description: proj.description
+									}
+								}));
+							else
+								return e.insert(e.projects, {
+									title: proj.title,
+									description: proj.description
+								});
+						})
+					)
+				),
+				certifications: e.assert_distinct(
+					e.set(
+						...data.certifications.map((cert) => {
+							if (cert.id)
+								return e.update(e.certifications, () => ({
+									filter_single: { id: cert.id },
+									set: {
+										certification_name: cert.certification_name,
+										certification_url: cert.certification_url
+									}
+								}));
+							else
+								return e.insert(e.certifications, {
+									certification_name: cert.certification_name,
+									certification_url: cert.certification_url
+								});
+						})
+					)
+				),
+				languages: e.assert_distinct(
+					e.set(
+						...data.languages.map((lang) => {
+							if (lang.id)
+								return e.update(e.languages, () => ({
+									filter_single: { id: lang.id },
+									set: {
+										language: lang.language,
+										proficiency: lang.proficiency
+									}
+								}));
+							else
+								return e.insert(e.languages, {
+									language: lang.language,
+									proficiency: lang.proficiency
 								});
 						})
 					)
 				)
 			}
 		}));
-		// social_media: e.assert_distinct(e.for(
-		// 	e.op('distinct', e.json_array_unpack(item.social_media)),
-		// 	(sm) => {
-		// 		if(sm.id) {
-		// 			const social= e.select(e.social_media, () => ({
-		// 				id:true,
-		// 				platform: true,
-		// 				url: true
-		// 			}))
-		// 			if(e.op(sm, "not in", social)) {
-		// 				return e.update(e.social_media, () => ({
-		// 					filter_single: { id: e.cast(e.uuid, sm.id) },
-		// 					set: {
-		// 						platform: e.cast(e.str, sm.platform),
-		// 						url: e.cast(e.str, sm.url)
-		// 					}
-		// 				}));
-		// 			} else {
-		// 				return e.insert(e.social_media, {
-		// 					platform: e.cast(e.str, sm.platform),
-		// 					url: e.cast(e.str, sm.url)
-		// 				});
-		// 			}
-		// 		}
 
-		// 		// socialMediaExists.find()
-		// 		if (Object.keys(socialMediaExists).length) {
-		// 			return e.update(e.social_media, () => ({
-		// 				filter_single: { id: e.cast(e.uuid, sm.id) },
-		// 				set: {
-		// 					platform: e.cast(e.str, sm.platform),
-		// 					url: e.cast(e.str, sm.url)
-		// 				}
-		// 			}));
-		// 		} else {
-		// 			return e.insert(e.social_media, {
-		// 				platform: e.cast(e.str, sm.platform),
-		// 				url: e.cast(e.str, sm.url)
-		// 			});
-		// 		}
-		// 	}
-		// ))
-
-		// social_media: e.for(
-		// 	e.op(
-		// 		"distinct", e.json_array_unpack(e.json_array_unpack(item.social_media))), (sm) => {
-		// 			return e.insert(e.social_media, {
-		// 				// id: e.cast(e.uuid, sm.id),
-		// 				platform: e.cast(e.str, sm.platform),
-		// 				url: e.cast(e.str, sm.url)
-		// 			}).unlessConflict((socail) => ({
-		// 				on: e.cast(e.uuid, socail.id),
-		// 				else: e.update(e.social_media, () => ({
-		// 					filter_single: {id: e.cast(e.uuid, socail.id)},
-		// 					set: {
-		// 						platform: e.cast(e.str, socail.platform),
-		// 						url: e.cast(e.str, socail.url)
-		// 					}
-		// 				}))
-		// 			}))
-		// 		}
-		// )
 		const result = await query.run(client);
-		client.execute(`
-			DELETE social_media
-			WHERE NOT EXISTS (
-				SELECT basic_details
-				FILTER .social_media = social_media
-			);
-		`);
-		
+		// client.execute(`
+		// DELETE social_media
+		// FILTER NOT EXISTS (
+		// 		SELECT basic_details
+		// 		FILTER social_media.source = basic_details
+		// );
+
+		// `);
 
 		return result;
 	}

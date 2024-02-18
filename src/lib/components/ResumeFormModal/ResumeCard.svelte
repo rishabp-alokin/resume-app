@@ -1,23 +1,25 @@
 <script>
-	export let cardDeatils = {};
+	export let cardDetails = {};
+	import { createEventDispatcher } from 'svelte';
+	const dispatch = createEventDispatcher()
 </script>
 
 <div>
 	<div class="card">
 		<header class="card-header flex justify-between">
-			<div class="flex justify-between items-center">
+			<div class="flex justify-between items-center px-4">
 				<div class="placeholder-circle w-16 mr-3" />
-				{cardDeatils.name}
+				{cardDetails.name}
 			</div>
-			<div class="actions grid grid-cols-3 gap-4">
-				<button type="button" class="btn-icon btn-lg variant-filled"
-					><img
+			<div class="actions grid grid-cols-3 gap-4 px-4 items-center">
+				<button type="button" class="btn-icon btn-lg variant-filled" on:click={() => dispatch('edit', cardDetails.id)}>
+					<img
 						width="24"
 						height="24"
 						src="https://img.icons8.com/ios-glyphs/30/edit--v1.png"
 						alt="edit--v1"
-					/></button
-				>
+					/>
+				</button>
 				<button type="button" class="btn-icon btn-lg variant-filled">
 					<img
 						width="24"

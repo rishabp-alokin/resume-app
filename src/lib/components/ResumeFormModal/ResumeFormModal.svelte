@@ -1,6 +1,8 @@
 <script>
 	import { Stepper, Step, InputChip, getModalStore } from '@skeletonlabs/skeleton';
 
+	import { onMount } from 'svelte';
+
 	const modalStore = getModalStore();
 
 	import ResumeAddressSocials from './ResumeAddressSocials.svelte';
@@ -12,14 +14,10 @@
 	const cBase =
 		'bg-surface-100-800-token w-screen h-screen p-4 flex flex-col justify-center items-center relative';
 
-	function closeModal() {
-		modalStore.close();
-	}
-
-	$: data = {
-		name: '',
-		designation: '',
-		email: '',
+	let data = {
+		name: 'rishab',
+		designation: 'me it sme',
+		email: 'hehe@gg.com',
 		phone: '',
 		summary: '',
 		address: {
@@ -66,6 +64,34 @@
 			}
 		]
 	};
+
+	onMount(async () => {
+		if (resumeId) {
+			Object.keys(data).forEach(async (item, index) => {
+				if (index + 1 === Object.keys(data).length) await getResumeDetails();
+			});
+		}
+	});
+
+	function closeModal() {
+		modalStore.close();
+	}
+
+	let resumeId = $modalStore[0].meta.resumeId;
+
+	// if (resumeId) {
+	// 	Object.keys(data).forEach(async (item, index) => {
+	// 		if (index + 1 === Object.keys(data).length) await getResumeDetails();
+	// 	});
+	// 	console.log(data, ".........")
+	// }
+
+	async function getResumeDetails() {
+		let response = await fetch(`/api/resume/${resumeId}`);
+		let resumeData = await response.json();
+		data = { ...data, ...resumeData.data };
+		console.log(data, '.........');
+	}
 </script>
 
 <div class={cBase}>

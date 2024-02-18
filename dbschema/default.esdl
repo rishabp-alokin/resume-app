@@ -55,7 +55,7 @@ module default {
   }
 
   type skills {
-    skill: str;
+    skills: json;
   }
 
   type projects{

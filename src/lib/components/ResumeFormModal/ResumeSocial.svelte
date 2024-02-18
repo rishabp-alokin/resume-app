@@ -19,10 +19,10 @@
 	{#each socials as social, index}
 		<div class="grid grid-cols-2 gap-4 pt-2">
 			<label class="label">
-				<input class="input" type="text" placeholder="Platform" />
+				<input class="input" type="text" placeholder="Platform" value={social.platform}/>
 			</label>
 			<label class="label">
-				<input class="input" type="text" placeholder="Url" />
+				<input class="input" type="text" placeholder="Url" value={social.url} />
 			</label>
 		</div>
 	{/each}

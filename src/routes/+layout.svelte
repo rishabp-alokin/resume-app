@@ -33,4 +33,9 @@
 </script>
 
 <slot />
-<Modal components={modalComponemts} position="items-center" shadow="shadow-xl" regionHeader="text-2xl font-bold"/>
+<Modal
+	components={modalComponemts}
+	position="items-center"
+	shadow="shadow-xl"
+	regionHeader="text-2xl font-bold"
+/>

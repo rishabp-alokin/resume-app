@@ -7,11 +7,12 @@
 
 	const modalStore = getModalStore();
 
-	function openModal() {
+	function openModal(resumeId) {
 		modalStore.trigger({
 			type: 'component',
 			component: 'ResumeFormModal',
-			backdropClasses: '!p-0'
+			backdropClasses: '!p-0',
+			meta: { resumeId: resumeId ?? '' }
 		});
 	}
 </script>
@@ -30,9 +31,9 @@
 			</button>
 		</svelte:fragment>
 	</AppBar>
-	<div class="grid gap-4 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-4 p-4">
+	<div class="grid gap-4 md:grid-cols-3 sm:grid-cols-2 lg:grid-cols-3 p-4">
 		{#each data.resumes as resume}
-			<ResumeCard cardDeatils={resume}/>
+			<ResumeCard cardDetails={resume} on:edit={(event) => openModal(event.detail)} />
 		{/each}
 	</div>
 </div>
