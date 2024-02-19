@@ -6,7 +6,7 @@
 	};
 
 	function addProject() {
-		certificates = [...certificates, defaultCertificate];
+		certificates = [...certificates, JSON.parse(JSON.stringify(defaultCertificate))];
 	}
 
 	$: addButtonClasses = certificates.length ? 'justify-end' : 'justify-center';
@@ -19,11 +19,21 @@
 		<div class="grid grid-cols-2 gap-3 pt-2">
 			<label class="label">
 				<span>Certification</span>
-				<input class="input" type="text" placeholder="Certification" />
+				<input
+					class="input"
+					type="text"
+					placeholder="Certification"
+					bind:value={certificate.certification_name}
+				/>
 			</label>
 			<label class="label">
 				<span>Url</span>
-				<input class="textarea" type="text" placeholder="Url" />
+				<input
+					class="textarea"
+					type="text"
+					placeholder="Url"
+					bind:value={certificate.certification_url}
+				/>
 			</label>
 		</div>
 	{/each}

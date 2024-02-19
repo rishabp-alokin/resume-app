@@ -11,7 +11,7 @@
 	};
 
 	function addExtraSocial() {
-		socials = [...socials, defaultSocial];
+		socials = [...socials, JSON.parse(JSON.stringify(defaultSocial))];
 	}
 </script>
 
@@ -19,10 +19,10 @@
 	{#each socials as social, index}
 		<div class="grid grid-cols-2 gap-4 pt-2">
 			<label class="label">
-				<input class="input" type="text" placeholder="Platform" value={social.platform}/>
+				<input class="input" type="text" placeholder="Platform" bind:value={social.platform} />
 			</label>
 			<label class="label">
-				<input class="input" type="text" placeholder="Url" value={social.url} />
+				<input class="input" type="text" placeholder="Url" bind:value={social.url} />
 			</label>
 		</div>
 	{/each}

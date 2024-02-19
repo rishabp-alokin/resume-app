@@ -14,6 +14,9 @@ export async function fetchAllResumeBasicDetails() {
 }
 
 export async function createResume(data) {
+
+
+	console.log(data, "??????????????????????????")
 	const query = e.params({ items: e.json }, (params) => {
 		return e.for(e.json_array_unpack(params.items), (item) => {
 			return e.insert(e.basic_details, {
@@ -31,7 +34,7 @@ export async function createResume(data) {
 					postal_code: e.cast(e.str, item.address.postal_code)
 				}),
 				skills: e.insert(e.skills, {
-					skills: e.cast(e.json, item.skills.skills)
+					skills: e.cast( e.str, item.skills.skills)
 				}),
 				social_media: e.assert_distinct(
 					e.for(e.json_array_unpack(item.social_media), (sm) => {
@@ -46,8 +49,8 @@ export async function createResume(data) {
 						return e.insert(e.education, {
 							institution: e.cast(e.str, edu.institution),
 							course: e.cast(e.str, edu.course),
-							passout_year: e.cast(e.int16, edu.passout_year),
-							marks: e.cast(e.int32, edu.marks)
+							passout_year: e.cast(e.str, edu.passout_year),
+							marks: e.cast(e.str, edu.marks)
 						});
 					})
 				),
@@ -56,8 +59,8 @@ export async function createResume(data) {
 						return e.insert(e.work_experience, {
 							company: e.cast(e.str, we.company),
 							designation: e.cast(e.str, we.designation),
-							joining_date: e.cast(e.datetime, we.joining_date),
-							worked_till: e.cast(e.datetime, we.worked_till)
+							joining_date: e.cast(e.str, we.joining_date),
+							worked_till: e.cast(e.str, we.worked_till)
 						});
 					})
 				),

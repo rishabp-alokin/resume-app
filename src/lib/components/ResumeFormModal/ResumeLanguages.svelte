@@ -6,7 +6,7 @@
 	};
 
 	function addExtra() {
-		languages = [...languages, defaultLanguage];
+		languages = [...languages, JSON.parse(JSON.stringify(defaultLanguage))];
 	}
 	$: addButtonClasses = languages.length ? 'justify-end' : 'justify-center';
 </script>
@@ -14,13 +14,23 @@
 <hr class="!border-dashed pb-2" />
 <span>Languages</span>
 <span class="">
-	{#each languages as language, index}
-		<div class="grid grid-cols-2 gap-4 pt-2">
+	{#each languages as languageData, index}
+		<div class="grid grid-cols-2 gap-4 pt-2" id="{index}id">
 			<label class="label">
-				<input class="input" type="text" placeholder="Platform" />
+				<input
+					class="input"
+					type="text"
+					placeholder="Language"
+					bind:value={languageData.language}
+				/>
 			</label>
 			<label class="label">
-				<input class="input" type="text" placeholder="Url" />
+				<input
+					class="input"
+					type="text"
+					placeholder="Proficiency"
+					bind:value={languageData.proficiency}
+				/>
 			</label>
 		</div>
 	{/each}

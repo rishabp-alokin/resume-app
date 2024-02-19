@@ -18,7 +18,7 @@ module default {
     multi work_experience: work_experience {
       on source delete delete target;
     };
-    multi skills: skills {
+    skills: skills {
       on source delete delete target;
     };
     multi projects: projects {
@@ -43,19 +43,19 @@ module default {
   type education {
     institution: str;
     course: str;
-    passout_year: int16;
-    marks: int32;
+    passout_year: str;
+    marks: str;
   }
 
   type work_experience {
     company: str;
     designation: str;
-    joining_date: datetime;
-    worked_till: datetime;
+    joining_date: str;
+    worked_till: str;
   }
 
   type skills {
-    skills: json;
+    skills: str;
   }
 
   type projects{

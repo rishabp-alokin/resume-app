@@ -1,5 +1,12 @@
 <script>
-	import { Stepper, Step, InputChip, getModalStore } from '@skeletonlabs/skeleton';
+	import {
+		Stepper,
+		Step,
+		InputChip,
+		getModalStore,
+		RadioGroup,
+		RadioItem
+	} from '@skeletonlabs/skeleton';
 
 	import { onMount } from 'svelte';
 
@@ -15,17 +22,18 @@
 		'bg-surface-100-800-token w-screen h-screen p-4 flex flex-col justify-center items-center relative';
 
 	let data = {
-		name: 'rishab',
+		name: '',
 		designation: 'me it sme',
-		email: 'hehe@gg.com',
+		email: '',
 		phone: '',
 		summary: '',
+		template_design_type: '1',
 		address: {
 			address: '',
 			city: '',
 			state: '',
 			country: '',
-			pin_code: ''
+			postal_code: ''
 		},
 		social_media: [
 			{
@@ -33,7 +41,7 @@
 				url: ''
 			}
 		],
-		eduaction: [
+		education: [
 			{
 				course: '',
 				institution: '',
@@ -44,10 +52,10 @@
 		projects: [],
 		work_experience: [
 			{
-				course: '',
-				institution: '',
-				marks: '',
-				passout_year: ''
+				company: '',
+				designation: '',
+				joining_date: '',
+				worked_till: ''
 			}
 		],
 		certifications: [
@@ -56,7 +64,9 @@
 				certification_url: ''
 			}
 		],
-		skills: [],
+		skills: {
+			skills: []
+		},
 		languages: [
 			{
 				language: '',
@@ -64,6 +74,8 @@
 			}
 		]
 	};
+
+	let skills = []
 
 	onMount(async () => {
 		if (resumeId) {
@@ -79,18 +91,44 @@
 
 	let resumeId = $modalStore[0].meta.resumeId;
 
-	// if (resumeId) {
-	// 	Object.keys(data).forEach(async (item, index) => {
-	// 		if (index + 1 === Object.keys(data).length) await getResumeDetails();
-	// 	});
-	// 	console.log(data, ".........")
-	// }
-
 	async function getResumeDetails() {
 		let response = await fetch(`/api/resume/${resumeId}`);
 		let resumeData = await response.json();
 		data = { ...data, ...resumeData.data };
-		console.log(data, '.........');
+		console.log(typeof data.skills, JSON.parse(data.skills.skills))
+		data.skills['skills'] = JSON.parse(data.skills?.skills ?? [])
+	}
+
+	async function createResume(data) {
+		let body = JSON.parse(JSON.stringify(data))
+		body.skills.skills = JSON.stringify(body.skills.skills)
+		let response = await fetch(`/api/resume/`, {
+			method: 'POST',
+			body: JSON.stringify(body)
+		});
+		let resumeData = await response.json();
+		console.log(resumeData);
+		$modalStore[0].response({ status: true });
+	}
+
+	let stepStatus = {
+		step1: true,
+		step2: false,
+		step3: false,
+		step4: false,
+		step5: false
+	};
+
+	function nameUpdated(name, email, phone) {
+		if (name && email && phone) stepStatus.step1 = false;
+	}
+
+	$: nameUpdated(data.name, data.email, data.phone);
+
+	async function saveResumeData() {
+		console.log(data, '///////');
+		await createResume(data);
+		closeModal();
 	}
 </script>
 
@@ -130,27 +168,32 @@
 			</svg>
 		</button>
 	</div>
-	<Stepper>
-		<Step>
+	<Stepper on:complete={saveResumeData}>
+		<Step locked={stepStatus.step1}>
 			<hr class="!border-dashed pb-2" />
 
 			<svelte:fragment slot="header">Basic Information</svelte:fragment>
 			<div class="grid grid-cols-2 gap-4">
 				<label class="label">
 					<span>Name</span>
-					<input class="input" type="text" placeholder="Name" value={data.name} />
+					<input class="input" type="text" placeholder="Name" bind:value={data.name} name="name" />
 				</label>
 				<label class="label">
 					<span>Designation</span>
-					<input class="input" type="text" placeholder="Designation" value={data.designation} />
+					<input
+						class="input"
+						type="text"
+						placeholder="Designation"
+						bind:value={data.designation}
+					/>
 				</label>
 				<label class="label">
 					<span>Email</span>
-					<input class="input" type="email" placeholder="Email" value={data.email} />
+					<input class="input" type="email" placeholder="Email" bind:value={data.email} />
 				</label>
 				<label class="label">
 					<span>Phone</span>
-					<input class="input" type="number" placeholder="Phone" value={data.email} />
+					<input class="input" type="text" placeholder="Phone" bind:value={data.phone} />
 				</label>
 			</div>
 			<label class="label">
@@ -161,30 +204,43 @@
 					rows="4"
 					class="textarea"
 					placeholder="Summary"
-					value={data.summary}
+					bind:value={data.summary}
 				/>
 			</label>
 		</Step>
-		<Step>
+		<Step locked={stepStatus.step2}>
 			<svelte:fragment slot="header">Address & Socials</svelte:fragment>
-			<ResumeAddressSocials address={data.address} social_media={data.social_media} />
+			<ResumeAddressSocials bind:address={data.address} bind:social_media={data.social_media} />
 		</Step>
-		<Step>
+		<Step locked={stepStatus.step3}>
 			<svelte:fragment slot="header">Education & Projects</svelte:fragment>
-			<ResumeEducation educations={data.eduaction} />
-			<ResumeProjects projects={data.projects} />
+			<ResumeEducation bind:educations={data.education} />
+			<ResumeProjects bind:projects={data.projects} />
 		</Step>
-		<Step>
+		<Step locked={stepStatus.step4}>
 			<svelte:fragment slot="header">Work Experiences & Certificates</svelte:fragment>
-			<ResumeWorkExperienece experiences={data.work_experience} />
-			<ResumeCertifications certificates={data.certifications} />
+			<ResumeWorkExperienece bind:experiences={data.work_experience} />
+			<ResumeCertifications bind:certificates={data.certifications} />
 		</Step>
-		<Step>
-			<svelte:fragment slot="header">Skills & Lauguages</svelte:fragment>
+		<Step locked={stepStatus.step5}>
+			<svelte:fragment slot="header">Skills & Languages</svelte:fragment>
 			<hr class="!border-dashed pb-2" />
 			<span>Skills</span>
-			<InputChip bind:value={data.skills} name="Skills" placeholder="Enter Skills Here" max="7" />
-			<ResumeLanguages languages={data.languages} />
+			<InputChip bind:value={data.skills.skills} name="Skills" placeholder="Enter Skills Here" max="7" />
+			<ResumeLanguages bind:languages={data.languages} />
+		</Step>
+		<Step>
+			<RadioGroup>
+				<RadioItem bind:group={data.template_design_type} name="justify" value="1"
+					>Style 1</RadioItem
+				>
+				<RadioItem bind:group={data.template_design_type} name="justify" value="2"
+					>Style 2</RadioItem
+				>
+				<RadioItem bind:group={data.template_design_type} name="justify" value="3"
+					>Style 3</RadioItem
+				>
+			</RadioGroup>
 		</Step>
 	</Stepper>
 </div>

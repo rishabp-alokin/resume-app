@@ -8,7 +8,7 @@
 	};
 
 	function addEducation() {
-		educations = [...educations, defaultEducation];
+		educations = [...educations, JSON.parse(JSON.stringify(defaultEducation))];
 	}
 </script>
 
@@ -19,19 +19,29 @@
 		<div class="grid grid-cols-2 gap-4">
 			<label class="label">
 				<span>Course</span>
-				<input class="input" type="text" placeholder="Course" />
+				<input class="input" type="text" placeholder="Course" bind:value={education.course} />
 			</label>
 			<label class="label">
 				<span>Institution</span>
-				<input class="input" type="text" placeholder="Institution" />
+				<input
+					class="input"
+					type="text"
+					placeholder="Institution"
+					bind:value={education.institution}
+				/>
 			</label>
 			<label class="label">
 				<span>Marks</span>
-				<input class="input" type="text" placeholder="Marks" />
+				<input class="input" type="text" placeholder="Marks" bind:value={education.marks} />
 			</label>
 			<label class="label">
 				<span>Passout Year</span>
-				<input class="input" type="text" placeholder="Passout year" />
+				<input
+					class="input"
+					type="text"
+					placeholder="Passout year"
+					bind:value={education.passout_year}
+				/>
 			</label>
 		</div>
 	{/each}

@@ -6,7 +6,7 @@
 	};
 
 	function addProject() {
-		projects = [...projects, defaultProject];
+		projects = [...projects, JSON.parse(JSON.stringify(defaultProject))];
 	}
 
 	$: addButtonClasses = projects.length ? 'justify-end' : 'justify-center';
@@ -19,11 +19,16 @@
 		<div class="grid grid-cols-1 gap-3 pt-2">
 			<label class="label">
 				<span>Project Title</span>
-				<input class="input" type="text" placeholder="Title" />
+				<input class="input" type="text" placeholder="Title" bind:value={project.title} />
 			</label>
 			<label class="label">
 				<span>Project description</span>
-				<textarea class="textarea" rows="2" placeholder="Description" />
+				<textarea
+					class="textarea"
+					rows="2"
+					placeholder="Description"
+					bind:value={project.description}
+				/>
 			</label>
 		</div>
 	{/each}

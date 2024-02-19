@@ -20,7 +20,7 @@
 						alt="edit--v1"
 					/>
 				</button>
-				<button type="button" class="btn-icon btn-lg variant-filled">
+				<button type="button" class="btn-icon btn-lg variant-filled" on:click={() => dispatch('delete', cardDetails.id)}>
 					<img
 						width="24"
 						height="24"
@@ -28,7 +28,7 @@
 						alt="filled-trash"
 					/>
 				</button>
-				<button type="button" class="btn-icon btn-lg variant-filled">
+				<button type="button" class="btn-icon btn-lg variant-filled" on:click={() => dispatch('preview', cardDetails.id)}>
 					<img
 						width="24"
 						height="24"
