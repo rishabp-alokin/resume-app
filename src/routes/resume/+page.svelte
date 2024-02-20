@@ -24,10 +24,13 @@
 			component: 'ResumeFormModal',
 			backdropClasses: '!p-0',
 			meta: { resumeId: resumeId ?? '' },
-			response: async (r) => await triggerGet()
+			response: async (r) => await triggerGet(resumeId)
 		});
 	}
-	async function triggerGet() {
+	async function triggerGet(id) {
+		toastStore.trigger({
+			message: id ? 'Resume Updated Sucessfully.' : 'Resume Created Sucessfully'
+		});
 		await getResumes();
 	}
 

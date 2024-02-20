@@ -34,7 +34,7 @@ export async function createResume(data) {
 					postal_code: e.cast(e.str, item.address.postal_code)
 				}),
 				skills: e.insert(e.skills, {
-					skills: e.cast( e.str, item.skills.skills)
+					skills: e.cast(e.str, item.skills.skills)
 				}),
 				social_media: e.assert_distinct(
 					e.for(e.json_array_unpack(item.social_media), (sm) => {
@@ -159,10 +159,10 @@ export async function updateResume(resumeId = '', data) {
 				skills: e.update(e.skills, () => ({
 					filter_single: { id: data.skills.id },
 					set: {
-						skills: data.skills.skills
+						skills: e.cast(e.str, data.skills.skills)
 					}
 				})),
-				social_media: e.assert_distinct(
+				social_media: data.social_media.length ? e.assert_distinct(
 					e.set(
 						...data.social_media.map((sm) => {
 							if (sm.id)
@@ -180,8 +180,8 @@ export async function updateResume(resumeId = '', data) {
 								});
 						})
 					)
-				),
-				education: e.assert_distinct(
+				) : e.set(),
+				education: data.education.length ? e.assert_distinct(
 					e.set(
 						...data.education.map((edu) => {
 							if (edu.id)
@@ -203,8 +203,8 @@ export async function updateResume(resumeId = '', data) {
 								});
 						})
 					)
-				),
-				work_experience: e.assert_distinct(
+				) : e.set(),
+				work_experience: data.work_experience.length ? e.assert_distinct(
 					e.set(
 						...data.work_experience.map((we) => {
 							if (we.id)
@@ -226,10 +226,10 @@ export async function updateResume(resumeId = '', data) {
 								});
 						})
 					)
-				),
-				projects: e.assert_distinct(
+				) : e.set(),
+				projects: data.projects.length ? e.assert_distinct(
 					e.set(
-						...data.projects.map((proj) => {
+						...data.projects.length ? data.projects.map((proj) => {
 							if (proj.id)
 								return e.update(e.projects, () => ({
 									filter_single: { id: proj.id },
@@ -243,10 +243,10 @@ export async function updateResume(resumeId = '', data) {
 									title: proj.title,
 									description: proj.description
 								});
-						})
+						}) : []
 					)
-				),
-				certifications: e.assert_distinct(
+				) : e.set(),
+				certifications: data.certifications.length ? e.assert_distinct(
 					e.set(
 						...data.certifications.map((cert) => {
 							if (cert.id)
@@ -264,8 +264,8 @@ export async function updateResume(resumeId = '', data) {
 								});
 						})
 					)
-				),
-				languages: e.assert_distinct(
+				) : e.set(),
+				languages: data.languages.length ? e.assert_distinct(
 					e.set(
 						...data.languages.map((lang) => {
 							if (lang.id)
@@ -283,7 +283,7 @@ export async function updateResume(resumeId = '', data) {
 								});
 						})
 					)
-				)
+				) : e.set()
 			}
 		}));
 

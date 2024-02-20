@@ -18,8 +18,7 @@
 	import ResumeCertifications from './ResumeCertifications.svelte';
 	import ResumeWorkExperienece from './ResumeWorkExperienece.svelte';
 	import ResumeLanguages from './ResumeLanguages.svelte';
-	const cBase =
-		'bg-surface-100-800-token w-screen h-screen p-4 flex flex-col justify-center items-center relative';
+	const cBase = 'bg-surface-100-800-token  items-center relative';
 
 	let data = {
 		name: '',
@@ -75,7 +74,7 @@
 		]
 	};
 
-	let skills = []
+	let skills = [];
 
 	onMount(async () => {
 		if (resumeId) {
@@ -95,19 +94,29 @@
 		let response = await fetch(`/api/resume/${resumeId}`);
 		let resumeData = await response.json();
 		data = { ...data, ...resumeData.data };
-		console.log(typeof data.skills, JSON.parse(data.skills.skills))
-		data.skills['skills'] = JSON.parse(data.skills?.skills ?? [])
+		console.log(data, '<<<<<<<<<<<<<<<<<<<<<<<');
+		data.skills['skills'] = JSON.parse(data.skills?.skills ?? []);
 	}
 
 	async function createResume(data) {
-		let body = JSON.parse(JSON.stringify(data))
-		body.skills.skills = JSON.stringify(body.skills.skills)
+		let body = JSON.parse(JSON.stringify(data));
+		body.skills.skills = JSON.stringify(body.skills.skills);
 		let response = await fetch(`/api/resume/`, {
 			method: 'POST',
 			body: JSON.stringify(body)
 		});
 		let resumeData = await response.json();
-		console.log(resumeData);
+		$modalStore[0].response({ status: true });
+	}
+
+	async function editResume(data) {
+		let body = JSON.parse(JSON.stringify(data));
+		body.skills.skills = JSON.stringify(body.skills.skills);
+		let response = await fetch(`/api/resume/${data.id}`, {
+			method: 'PUT',
+			body: JSON.stringify(body)
+		});
+		let resumeData = await response.json();
 		$modalStore[0].response({ status: true });
 	}
 
@@ -126,21 +135,25 @@
 	$: nameUpdated(data.name, data.email, data.phone);
 
 	async function saveResumeData() {
-		console.log(data, '///////');
-		await createResume(data);
+		if (data.id) {
+			await editResume(data);
+		} else {
+			await createResume(data);
+		}
 		closeModal();
 	}
 </script>
 
 <div class={cBase}>
-	<div class="absolute top-4 right-4">
-		<button type="button" class="btn-icon btn-lg" on:click={() => closeModal()}>
+	<div class="flex pl-4 py-2 justify-between">
+		<span class="text-xl font-semibold flex items-center">Create/Edit Resume</span>
+		<div class="mr-3" on:click={() => closeModal()}>
 			<svg
 				xmlns="http://www.w3.org/2000/svg"
 				x="0px"
 				y="0px"
-				width="48"
-				height="48"
+				width="30"
+				height="30"
 				viewBox="0,0,256,256"
 				style="fill:#000000;"
 			>
@@ -166,81 +179,94 @@
 					></g
 				>
 			</svg>
-		</button>
+		</div>
 	</div>
-	<Stepper on:complete={saveResumeData}>
-		<Step locked={stepStatus.step1}>
-			<hr class="!border-dashed pb-2" />
+	<div class="p-4">
+		<Stepper on:complete={saveResumeData}>
+			<Step locked={stepStatus.step1}>
+				<hr class="!border-dashed pb-2" />
 
-			<svelte:fragment slot="header">Basic Information</svelte:fragment>
-			<div class="grid grid-cols-2 gap-4">
+				<svelte:fragment slot="header">Basic Information</svelte:fragment>
+				<div class="grid grid-cols-2 gap-4">
+					<label class="label">
+						<span>Name</span>
+						<input
+							class="input"
+							type="text"
+							placeholder="Name"
+							bind:value={data.name}
+							name="name"
+						/>
+					</label>
+					<label class="label">
+						<span>Designation</span>
+						<input
+							class="input"
+							type="text"
+							placeholder="Designation"
+							bind:value={data.designation}
+						/>
+					</label>
+					<label class="label">
+						<span>Email</span>
+						<input class="input" type="email" placeholder="Email" bind:value={data.email} />
+					</label>
+					<label class="label">
+						<span>Phone</span>
+						<input class="input" type="text" placeholder="Phone" bind:value={data.phone} />
+					</label>
+				</div>
 				<label class="label">
-					<span>Name</span>
-					<input class="input" type="text" placeholder="Name" bind:value={data.name} name="name" />
-				</label>
-				<label class="label">
-					<span>Designation</span>
-					<input
-						class="input"
-						type="text"
-						placeholder="Designation"
-						bind:value={data.designation}
+					<span>Summary</span>
+					<textarea
+						name="summary"
+						id="summary"
+						rows="4"
+						class="textarea"
+						placeholder="Summary"
+						bind:value={data.summary}
 					/>
 				</label>
-				<label class="label">
-					<span>Email</span>
-					<input class="input" type="email" placeholder="Email" bind:value={data.email} />
-				</label>
-				<label class="label">
-					<span>Phone</span>
-					<input class="input" type="text" placeholder="Phone" bind:value={data.phone} />
-				</label>
-			</div>
-			<label class="label">
-				<span>Summary</span>
-				<textarea
-					name="summary"
-					id="summary"
-					rows="4"
-					class="textarea"
-					placeholder="Summary"
-					bind:value={data.summary}
+			</Step>
+			<Step locked={stepStatus.step2}>
+				<svelte:fragment slot="header">Address & Socials</svelte:fragment>
+				<ResumeAddressSocials bind:address={data.address} bind:social_media={data.social_media} />
+			</Step>
+			<Step locked={stepStatus.step3}>
+				<svelte:fragment slot="header">Education & Projects</svelte:fragment>
+				<ResumeEducation bind:educations={data.education} />
+				<ResumeProjects bind:projects={data.projects} />
+			</Step>
+			<Step locked={stepStatus.step4}>
+				<svelte:fragment slot="header">Work Experiences & Certificates</svelte:fragment>
+				<ResumeWorkExperienece bind:experiences={data.work_experience} />
+				<ResumeCertifications bind:certificates={data.certifications} />
+			</Step>
+			<Step locked={stepStatus.step5}>
+				<svelte:fragment slot="header">Skills & Languages</svelte:fragment>
+				<hr class="!border-dashed pb-2" />
+				<span>Skills</span>
+				<InputChip
+					bind:value={data.skills.skills}
+					name="Skills"
+					placeholder="Enter Skills Here"
+					max="7"
 				/>
-			</label>
-		</Step>
-		<Step locked={stepStatus.step2}>
-			<svelte:fragment slot="header">Address & Socials</svelte:fragment>
-			<ResumeAddressSocials bind:address={data.address} bind:social_media={data.social_media} />
-		</Step>
-		<Step locked={stepStatus.step3}>
-			<svelte:fragment slot="header">Education & Projects</svelte:fragment>
-			<ResumeEducation bind:educations={data.education} />
-			<ResumeProjects bind:projects={data.projects} />
-		</Step>
-		<Step locked={stepStatus.step4}>
-			<svelte:fragment slot="header">Work Experiences & Certificates</svelte:fragment>
-			<ResumeWorkExperienece bind:experiences={data.work_experience} />
-			<ResumeCertifications bind:certificates={data.certifications} />
-		</Step>
-		<Step locked={stepStatus.step5}>
-			<svelte:fragment slot="header">Skills & Languages</svelte:fragment>
-			<hr class="!border-dashed pb-2" />
-			<span>Skills</span>
-			<InputChip bind:value={data.skills.skills} name="Skills" placeholder="Enter Skills Here" max="7" />
-			<ResumeLanguages bind:languages={data.languages} />
-		</Step>
-		<Step>
-			<RadioGroup>
-				<RadioItem bind:group={data.template_design_type} name="justify" value="1"
-					>Style 1</RadioItem
-				>
-				<RadioItem bind:group={data.template_design_type} name="justify" value="2"
-					>Style 2</RadioItem
-				>
-				<RadioItem bind:group={data.template_design_type} name="justify" value="3"
-					>Style 3</RadioItem
-				>
-			</RadioGroup>
-		</Step>
-	</Stepper>
+				<ResumeLanguages bind:languages={data.languages} />
+			</Step>
+			<Step>
+				<RadioGroup>
+					<RadioItem bind:group={data.template_design_type} name="justify" value="1"
+						>Style 1</RadioItem
+					>
+					<RadioItem bind:group={data.template_design_type} name="justify" value="2"
+						>Style 2</RadioItem
+					>
+					<RadioItem bind:group={data.template_design_type} name="justify" value="3"
+						>Style 3</RadioItem
+					>
+				</RadioGroup>
+			</Step>
+		</Stepper>
+	</div>
 </div>
