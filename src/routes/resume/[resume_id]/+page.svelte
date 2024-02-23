@@ -31,12 +31,24 @@
 	onMount(async () => {
 		resumeData = { ...resumeData, ...data.data };
 	});
+
+	function printDiv() {
+		var printContents = document.getElementById('resume').innerHTML;
+		var originalContents = document.body.innerHTML;
+
+		document.body.innerHTML = printContents;
+
+		window.print();
+
+		document.body.innerHTML = originalContents;
+	}
 </script>
 
-<div class="w-full h-full">
-	<ResumeViewOne data={resumeData} />
-	<!-- <div class="grid grid-cols-3">
-		<div class="col-span-2">{resumeData.name}</div>
-		<div class=""></div>
-	</div> -->
+<div class="flex flex-col justify-center items-center">
+	<div class="resume" id="resume">
+		<ResumeViewOne data={resumeData} />
+	</div>
+	<button type="button" class="btn variant-filled w-[20%] mt-6" on:click={() => printDiv()}>
+		<span>Print</span>
+	</button>
 </div>
