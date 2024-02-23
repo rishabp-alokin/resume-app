@@ -10,6 +10,8 @@
 	function addEducation() {
 		educations = [...educations, JSON.parse(JSON.stringify(defaultEducation))];
 	}
+	$: addButtonClasses = educations.length ? 'justify-end mt-4' : 'justify-center items-center';
+
 </script>
 
 <hr class="!border-dashed pb-2" />
@@ -46,7 +48,7 @@
 		</div>
 	{/each}
 	{#if educations.length <= 4}
-		<span class="flex justify-end mt-4">
+		<span class="flex justify-end {addButtonClasses}">
 			<button on:click={addEducation} class="btn variant-filled">+Add Education</button>
 		</span>
 	{/if}

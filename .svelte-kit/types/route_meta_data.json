@@ -8,5 +8,8 @@
 	],
 	"/resume": [
 		"src/routes/resume/+page.js"
+	],
+	"/resume/[resume_id]": [
+		"src/routes/resume/[resume_id]/+page.js"
 	]
 }

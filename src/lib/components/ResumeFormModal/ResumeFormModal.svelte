@@ -18,11 +18,13 @@
 	import ResumeCertifications from './ResumeCertifications.svelte';
 	import ResumeWorkExperienece from './ResumeWorkExperienece.svelte';
 	import ResumeLanguages from './ResumeLanguages.svelte';
-	const cBase = 'bg-surface-100-800-token  items-center relative';
+	import ResumeTemplate from './ResumeTemplate.svelte';
+	const cBase =
+		'bg-surface-100-800-token items-center relative md:w-3/4 sm:w-full lg:w-3/5 xl:w-2/5';
 
 	let data = {
 		name: '',
-		designation: 'me it sme',
+		designation: '',
 		email: '',
 		phone: '',
 		summary: '',
@@ -34,44 +36,13 @@
 			country: '',
 			postal_code: ''
 		},
-		social_media: [
-			{
-				platform: '',
-				url: ''
-			}
-		],
-		education: [
-			{
-				course: '',
-				institution: '',
-				marks: '',
-				passout_year: ''
-			}
-		],
+		social_media: [],
+		education: [],
 		projects: [],
-		work_experience: [
-			{
-				company: '',
-				designation: '',
-				joining_date: '',
-				worked_till: ''
-			}
-		],
-		certifications: [
-			{
-				certification_name: '',
-				certification_url: ''
-			}
-		],
-		skills: {
-			skills: []
-		},
-		languages: [
-			{
-				language: '',
-				proficiency: ''
-			}
-		]
+		work_experience: [],
+		certifications: [],
+		skills: {},
+		languages: []
 	};
 
 	let skills = [];
@@ -255,17 +226,8 @@
 				<ResumeLanguages bind:languages={data.languages} />
 			</Step>
 			<Step>
-				<RadioGroup>
-					<RadioItem bind:group={data.template_design_type} name="justify" value="1"
-						>Style 1</RadioItem
-					>
-					<RadioItem bind:group={data.template_design_type} name="justify" value="2"
-						>Style 2</RadioItem
-					>
-					<RadioItem bind:group={data.template_design_type} name="justify" value="3"
-						>Style 3</RadioItem
-					>
-				</RadioGroup>
+				<svelte:fragment slot="header">Resume Design Style</svelte:fragment>
+				<ResumeTemplate bind:style={data.template_design_type} />
 			</Step>
 		</Stepper>
 	</div>

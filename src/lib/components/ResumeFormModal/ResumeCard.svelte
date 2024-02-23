@@ -28,7 +28,7 @@
 						alt="filled-trash"
 					/>
 				</button>
-				<button type="button" class="btn-icon btn-lg variant-filled" on:click={() => dispatch('preview', cardDetails.id)}>
+				<button type="button" class="btn-icon btn-lg variant-filled" on:click={() => window.location.href = `/resume/${cardDetails.id}`}>
 					<img
 						width="24"
 						height="24"

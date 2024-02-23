@@ -8,7 +8,7 @@
 	function addExtra() {
 		languages = [...languages, JSON.parse(JSON.stringify(defaultLanguage))];
 	}
-	$: addButtonClasses = languages.length ? 'justify-end' : 'justify-center';
+	$: addButtonClasses = languages.length ? 'justify-end mt-4' : 'justify-center';
 </script>
 
 <hr class="!border-dashed pb-2" />
@@ -35,7 +35,7 @@
 		</div>
 	{/each}
 	{#if languages.length <= 2}
-		<span class="flex mt-4 {addButtonClasses}">
+		<span class="flex {addButtonClasses}">
 			<button on:click={addExtra} class="btn variant-filled">+Add Language</button>
 		</span>
 	{/if}

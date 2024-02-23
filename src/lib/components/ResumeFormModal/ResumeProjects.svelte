@@ -9,7 +9,7 @@
 		projects = [...projects, JSON.parse(JSON.stringify(defaultProject))];
 	}
 
-	$: addButtonClasses = projects.length ? 'justify-end' : 'justify-center';
+	$: addButtonClasses = projects.length ? 'justify-end mt-4' : 'justify-center';
 </script>
 
 <hr class="!border-dashed pb-2" />
@@ -33,7 +33,7 @@
 		</div>
 	{/each}
 	{#if projects.length <= 4}
-		<span class="flex mt-4 {addButtonClasses}">
+		<span class="flex {addButtonClasses}">
 			<button on:click={addProject} class="btn variant-filled">+Add Project</button>
 		</span>
 	{/if}

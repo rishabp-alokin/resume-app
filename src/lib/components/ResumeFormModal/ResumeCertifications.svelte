@@ -9,7 +9,7 @@
 		certificates = [...certificates, JSON.parse(JSON.stringify(defaultCertificate))];
 	}
 
-	$: addButtonClasses = certificates.length ? 'justify-end' : 'justify-center';
+	$: addButtonClasses = certificates.length ? 'justify-end mt-4' : 'justify-center';
 </script>
 
 <hr class="!border-dashed pb-2" />
@@ -38,7 +38,7 @@
 		</div>
 	{/each}
 	{#if certificates.length <= 3}
-		<span class="flex mt-4 {addButtonClasses}">
+		<span class="flex {addButtonClasses}">
 			<button on:click={addProject} class="btn variant-filled">+Add Certificates</button>
 		</span>
 	{/if}

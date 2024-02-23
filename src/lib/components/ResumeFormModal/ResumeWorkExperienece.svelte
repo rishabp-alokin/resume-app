@@ -10,6 +10,8 @@
 	function addExpereince() {
 		experiences = [...experiences, JSON.parse(JSON.stringify(defaultExperience))];
 	}
+	$: addButtonClasses = experiences.length ? 'justify-end mt-4' : 'justify-center items-center';
+
 </script>
 
 <hr class="!border-dashed pb-2" />
@@ -44,7 +46,7 @@
 		</div>
 	{/each}
 	{#if experiences.length <= 4}
-		<span class="flex justify-end mt-4">
+		<span class="flex justify-end {addButtonClasses}">
 			<button on:click={addExpereince} class="btn variant-filled">+Add Experience</button>
 		</span>
 	{/if}
