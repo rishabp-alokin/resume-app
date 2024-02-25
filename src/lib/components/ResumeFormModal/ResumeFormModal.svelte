@@ -152,13 +152,13 @@
 			</svg>
 		</div>
 	</div>
-	<div class="p-4">
+	<div class="p-4 max-h-[80vh] overflow-auto">
 		<Stepper on:complete={saveResumeData}>
 			<Step locked={stepStatus.step1}>
 				<hr class="!border-dashed pb-2" />
 
 				<svelte:fragment slot="header">Basic Information</svelte:fragment>
-				<div class="grid grid-cols-2 gap-4">
+				<div class="grid grid-cols-2 gap-4 max-h-[60vh] overflow-auto">
 					<label class="label">
 						<span>Name</span>
 						<input
@@ -201,29 +201,37 @@
 			</Step>
 			<Step locked={stepStatus.step2}>
 				<svelte:fragment slot="header">Address & Socials</svelte:fragment>
-				<ResumeAddressSocials bind:address={data.address} bind:social_media={data.social_media} />
+				<div class="max-h-[60vh] overflow-auto">
+					<ResumeAddressSocials bind:address={data.address} bind:social_media={data.social_media} />
+				</div>
 			</Step>
 			<Step locked={stepStatus.step3}>
 				<svelte:fragment slot="header">Education & Projects</svelte:fragment>
-				<ResumeEducation bind:educations={data.education} />
-				<ResumeProjects bind:projects={data.projects} />
+				<div class="max-h-[60vh] overflow-auto">
+					<ResumeEducation bind:educations={data.education} />
+					<ResumeProjects bind:projects={data.projects} />
+				</div>
 			</Step>
 			<Step locked={stepStatus.step4}>
 				<svelte:fragment slot="header">Work Experiences & Certificates</svelte:fragment>
-				<ResumeWorkExperienece bind:experiences={data.work_experience} />
-				<ResumeCertifications bind:certificates={data.certifications} />
+				<div class="max-h-[60vh] overflow-auto">
+					<ResumeWorkExperienece bind:experiences={data.work_experience} />
+					<ResumeCertifications bind:certificates={data.certifications} />
+				</div>
 			</Step>
 			<Step locked={stepStatus.step5}>
 				<svelte:fragment slot="header">Skills & Languages</svelte:fragment>
-				<hr class="!border-dashed pb-2" />
-				<span>Skills</span>
-				<InputChip
-					bind:value={data.skills.skills}
-					name="Skills"
-					placeholder="Enter Skills Here"
-					max="7"
-				/>
-				<ResumeLanguages bind:languages={data.languages} />
+				<div class="max-h-[60vh] overflow-auto">
+					<hr class="!border-dashed pb-2" />
+					<span>Skills</span>
+					<InputChip
+						bind:value={data.skills.skills}
+						name="Skills"
+						placeholder="Enter Skills Here"
+						max="7"
+					/>
+					<ResumeLanguages bind:languages={data.languages} />
+				</div>
 			</Step>
 			<Step>
 				<svelte:fragment slot="header">Resume Design Style</svelte:fragment>

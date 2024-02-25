@@ -2,7 +2,8 @@
 	import { onMount } from 'svelte';
 
 	import ResumeViewOne from '$lib/components/ResumeFormModal/ResumeViewOne.svelte';
-
+	import ResumeViewTwo from '$lib/components/ResumeFormModal/ResumeViewTwo.svelte';
+	import ResumeViewThree from '$lib/components/ResumeFormModal/ResumeViewThree.svelte';
 	export let data;
 
 	let resumeData = {
@@ -46,7 +47,13 @@
 
 <div class="flex flex-col justify-center items-center">
 	<div class="resume" id="resume">
-		<ResumeViewOne data={resumeData} />
+		{#if resumeData.template_design_type == '1'}
+			<ResumeViewOne data={resumeData} />
+		{:else if resumeData.template_design_type == '2'}
+			<ResumeViewTwo data={resumeData} />
+		{:else if resumeData.template_design_type == '3'}
+			<ResumeViewThree data={resumeData} />
+		{/if}
 	</div>
 	<button type="button" class="btn variant-filled w-[20%] mt-6" on:click={() => printDiv()}>
 		<span>Print</span>

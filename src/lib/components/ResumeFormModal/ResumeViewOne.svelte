@@ -38,7 +38,7 @@
 				</h2>
 				<div class="flex flex-col gap-2">
 					{#each data.education as education}
-						<section class="flex flex-col p-4 mx-2 rounded-lg bg-slate-100">
+						<section class="flex flex-col p-4 rounded-lg bg-slate-100">
 							<div class="flex justify-between">
 								<strong>{education.course}</strong>
 								<span class="time">
@@ -59,7 +59,7 @@
 				</h2>
 				<div class="flex flex-col gap-2">
 					{#each data.work_experience as experience}
-						<section class="flex flex-col p-4 mx-2 rounded-lg bg-slate-100">
+						<section class="flex flex-col p-4 rounded-lg bg-slate-100">
 							<div class="flex justify-between">
 								<strong>{experience.designation}</strong>
 								<span class="time">
@@ -78,7 +78,7 @@
 				<h2 class="pt-6 text-2xl uppercase font-mono border-b-2 border-slate-300 mb-4">Projects</h2>
 				<div class="flex flex-col gap-2">
 					{#each data.projects as project}
-						<section class="flex flex-col p-4 mx-2 rounded-lg bg-slate-100">
+						<section class="flex flex-col p-4 rounded-lg bg-slate-100">
 							<strong class="text-base">
 								{project.title}
 							</strong>
@@ -93,7 +93,7 @@
 				</h2>
 				<div class="flex flex-col gap-2">
 					{#each data.certifications as certification}
-						<section class="flex flex-col p-4 mx-2 rounded-lg bg-slate-100">
+						<section class="flex flex-col p-4 rounded-lg bg-slate-100">
 							<div class="flex justify-between items-center">
 								<span>{certification.certification_name}</span>
 								<span>
@@ -116,9 +116,9 @@
 		<div class="mt-4">
 			<hr class="!border-dashed px-4" />
 
-			<div class="flex gap-2 justify-between">
+			<div class="flex gap-4 pt-2 justify-between">
 				{#if data.skills}
-					<section class="w-[50%] p-2 m-2 bg-slate-100 rounded-md">
+					<section class="w-[50%] p-2 my-2 bg-slate-100 rounded-md">
 						<span class="text-xl uppercase font-mono border-b-2 border-slate-300">Skills</span>
 						<div class="pt-2">
 							{#each data.skills.skills as skill}
@@ -128,7 +128,7 @@
 					</section>
 				{/if}
 
-				<section class="w-[50%] p-2 m-2 bg-slate-100 rounded-md">
+				<section class="w-[50%] p-2 my-2 bg-slate-100 rounded-md">
 					<span class="text-xl uppercase font-mono border-b-2 border-slate-300 mb-2">
 						Proficent Languages
 					</span>
@@ -143,8 +143,8 @@
 				</section>
 			</div>
 
-			<div class="flex gap-2 justify-between">
-				<section class="w-[50%] p-2 m-2 bg-slate-100 rounded-md">
+			<div class="flex gap-4 justify-between">
+				<section class="w-[50%] p-2 my-2 bg-slate-100 rounded-md">
 					<span class="text-xl uppercase font-mono border-b-2 border-slate-300 mb-2">Address</span>
 					<p class="capitalize text-wrap pt-2 px-4">
 						{data.address.address},<br />
@@ -154,7 +154,7 @@
 					</p>
 				</section>
 
-				<section class="w-[50%] p-2 m-2 bg-slate-100 rounded-md">
+				<section class="w-[50%] p-2 my-2 bg-slate-100 rounded-md">
 					<span class="text-xl uppercase font-mono border-b-2 border-slate-300 mb-2">Socials</span>
 					<div class="">
 						{#each data.social_media as social}
