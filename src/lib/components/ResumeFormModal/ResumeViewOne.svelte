@@ -13,11 +13,19 @@
 <div class="page bg-white min-w-[826px] max-w-[826px] text-black">
 	<!-- 1. Header -->
 	<header class="w-[100%] px-8">
-		<h1
-			class="border-double border-b-4 border-black mb-6 text-5xl py-6 justify-center item-center flex"
+		<div
+			class="border-double border-b-4 border-black mb-6 py-6 justify-center item-center flex flex-col"
 		>
-			{data.name}
-		</h1>
+			<h1 class="text-5xl uppercase flex justify-center">
+				{data.name}
+			</h1>
+			<span class="flex justify-center items-center">
+				<span class="material-symbols-outlined px-1"> smartphone </span>
+				{data.phone}
+				<span class="material-symbols-outlined px-1"> mail </span>
+				{data.email}
+			</span>
+		</div>
 		<span class="py-2 px-4 text-2xl font-mono font-bold">{data.designation}</span>
 		<div class="pt-2 px-4 text-justify">{data.summary}</div>
 	</header>
@@ -170,3 +178,10 @@
 		</div>
 	</div>
 </div>
+
+<style>
+	.material-symbols-outlined {
+		font-size: 20px !important;
+		line-height: normal;
+	}
+</style>
